@@ -1,0 +1,58 @@
+<div class="container mt-4">
+    <h4>Agregar Categoría</h4>
+    <form (ngSubmit)="guardarCategoria()" #formCategoria="ngForm" class="row g-3">
+
+        <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" id="nombre" class="form-control" [(ngModel)]="categoria.nombre" name="nombre" required>
+        </div>
+
+        <div class="col-md-6">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <input type="text" id="descripcion" class="form-control" [(ngModel)]="categoria.descripcion" name="descripcion">
+        </div>
+
+        <div class="col-md-6">
+        <label for="tipo" class="form-label">Tipo</label>
+        <select class="form-select" [(ngModel)]="categoria.tipoId" name="tipoId" required>
+            <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.nombre }}</option>
+        </select>
+        </div>
+
+        <div class="col-12">
+        <button type="submit" class="btn btn-primary">{{ editando ? 'Actualizar' : 'Guardar'}}</button>
+        <button type="button" class="btn btn-secondary ms-2" *ngIf="editando" (click)="cancelarEdicion()">
+        Cancelar
+        </button>
+        </div>
+    </form>
+
+    <hr>
+
+    <h5 class="mt-4">Categorías Registradas</h5>
+    <table class="table table-bordered table-striped mt-2">
+        <thead class="table-light">
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let cat of categorias">
+            <td>{{ cat.nombre }}</td>
+            <td>{{ cat.descripcion }}</td>
+            <td>
+            <span class="badge fs-6" [style.backgroundColor]="cat.tipo?.color">
+                {{cat.tipo?.nombre}}
+            </span>
+            </td>
+            <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="editarCategoria(cat)">Editar</button>
+            <button class="btn btn-sm btn-danger" (click)="eliminarCategoria(cat.id)">Eliminar</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

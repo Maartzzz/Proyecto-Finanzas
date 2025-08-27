@@ -1,0 +1,63 @@
+<div class="container mt-4">
+    <h4 class="mb-3">Registrar Movimiento</h4>
+    <form (ngSubmit)="guardarMovimiento()" #formMov="ngForm" class="row g-3">
+
+        <div class="col-md-4">
+        <label class="form-label">Monto</label>
+        <input type="number" [(ngModel)]="movimiento.monto" name="monto" required class="form-control">
+        </div>
+
+        <div class="col-md-4">
+        <label class="form-label">Descripción</label>
+        <input type="text" [(ngModel)]="movimiento.descripcion" name="descripcion" class="form-control">
+        </div>
+
+        <div class="col-md-4">
+        <label class="form-label">Categoría</label>
+        <select [(ngModel)]="movimiento.categoriaId" name="categoriaId" required class="form-select">
+            <option *ngFor="let cat of categorias" [value]="cat.id">
+            {{ cat.nombre }} ({{ cat.tipo.nombre }})
+            </option>
+        </select>
+        </div>
+
+        <div class="col-12">
+        <button class="btn btn-success" type="submit">{{ editando ? 'Actualizar' : 'Guardar' }}</button>
+        </div>
+    </form>
+
+    <hr class="my-4">
+
+    <h5>Movimientos Registrados</h5>
+    <div class="alert alert-info mt-3">
+        <strong>Saldo Actual: </strong> {{ obtenerSaldo() | currency:'USD':'symbol' }}
+    </div>
+
+    <table class="table table-bordered mt-2">
+        <thead class="table-light">
+        <tr>
+            <th>Monto</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let mov of movimientos">
+            <td>{{ mov.monto | currency:'USD' }}</td>
+            <td>{{ mov.descripcion }}</td>
+            <td>{{ obtenerNombreCategoria(mov.categoria.id) }}</td>
+            <td>
+            <span class="badge" [ngStyle]="{ 'background-color': obtenerTipoColorPorCategoriaId(mov.categoria.id) }">
+                {{ mov.categoria.tipo.nombre }}
+            </span>
+            </td>
+            <td>
+            <button class="btn btn-warning btn-sm me-2" (click)="editarMovimiento(mov)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="eliminarMovimiento(mov.id)">Eliminar</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

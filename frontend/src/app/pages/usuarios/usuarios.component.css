@@ -1,0 +1,10 @@
+.usuario-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    gap: 16px;
+}
+
+.form-field {
+    width: 100%;
+}

@@ -1,0 +1,90 @@
+<!-- login.component.html -->
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow p-4 w-100" style="max-width: 400px;">
+        <h3 class="text-center mb-4">Iniciar Sesión</h3>
+
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+        <div class="mb-3">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input
+            type="email"
+            id="correo"
+            class="form-control"
+            [(ngModel)]="correo"
+            name="correo"
+            required
+            placeholder="tucorreo@example.com"
+            />
+        </div>
+
+        <div class="mb-3">
+            <label for="contrasena" class="form-label">Contraseña</label>
+            <input
+            type="password"
+            id="contrasena"
+            class="form-control"
+            [(ngModel)]="contrasena"
+            name="contrasena"
+            required
+            placeholder="••••••••"
+            />
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger py-2 text-center">
+            {{ error }}
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+        </div>
+        </form>
+
+            <!-- Botón para abrir el modal -->
+    <div class="text-center mt-3">
+    <a href="#" data-bs-toggle="modal" data-bs-target="#registroModal">¿No tienes cuenta? Regístrate</a>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form (ngSubmit)="registrarUsuario(registroForm)" #registroForm="ngForm">
+            <div class="modal-header">
+            <h5 class="modal-title" id="registroModalLabel">Crear Cuenta</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required [(ngModel)]="registro.nombre">
+            </div>
+            <div class="mb-3">
+                <label for="apellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="apellido" name="apellido" required [(ngModel)]="registro.apellido">
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="correoreg" name="correo" required [(ngModel)]="registro.correo">
+            </div>
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" name="telefono" [(ngModel)]="registro.telefono">
+            </div>
+            <div class="mb-3">
+                <label for="contrasena" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="contrasenareg" name="contrasena" required [(ngModel)]="registro.contrasena">
+            </div>
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Registrar</button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    </div>
+</div>

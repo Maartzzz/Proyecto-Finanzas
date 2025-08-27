@@ -1,0 +1,98 @@
+<div class="container mt-5">
+    <!-- Datos del Usuario y Saldo -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="card-title">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+            <p class="card-text text-muted mb-0">{{ usuario.correo }}</p>
+        </div>
+        <div>
+            <h4 class="text-success">Saldo actual: S/. {{ calcularSaldo()}}</h4>
+            <h4 class="text-primary">Saldo ahorrado: S/. {{ calcularAhorro()}}</h4>
+        </div>
+        </div>
+    </div>
+
+    <!-- Navegación -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+        <button class="nav-link" [class.active]="vista === 'movimientos'" (click)="vista = 'movimientos'">Movimientos</button>
+        </li>
+        <li class="nav-item">
+        <button class="nav-link" [class.active]="vista === 'categorias'" (click)="vista = 'categorias'">Categorías</button>
+        </li>
+        <li class="nav-item">
+        <button class="nav-link" [class.active]="vista === 'metas'" (click)="vista = 'metas'">Metas</button>
+        </li>
+    </ul>
+
+    <!-- Movimientos -->
+    <div *ngIf="vista === 'movimientos'">
+        <h4>📊 Historial de Movimientos</h4>
+        <ul *ngIf="movimientos.length > 0; else sinMovimientos" class="list-group mb-4">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let m of movimientos"
+            [ngStyle]="{ 'borderLeft': '5px solid ' + m.categoria.tipo.color }">
+            <div>
+            <strong>{{ m.categoria.nombre }}</strong> - {{ m.descripcion || 'Sin descripción' }}
+            </div>
+            <span class="fw-bold">S/. {{ m.monto }}</span>
+        </li>
+        </ul>
+        <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Distribución por tipo</h5>
+            <canvas baseChart
+            [data]="chartDataPie"
+            [type]="'pie'">
+            </canvas>
+        </div>
+        </div>
+        <ng-template #sinMovimientos>
+        <div class="text-muted">No tienes movimientos registrados.</div>
+        </ng-template>
+    </div>
+
+    <!-- Categorías -->
+    <div *ngIf="vista === 'categorias'">
+        <h4>📁 Categorías Registradas</h4>
+        <div *ngFor="let tipo of tipos">
+        <h5 class="mt-4 mb-2" [ngStyle]="{'color': tipo.color}">{{ tipo.nombre }}</h5>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            <div class="col" *ngFor="let cat of filtrarCategoriasPorTipo(tipo.id)">
+            <div class="card h-100 border-start border-4" [ngStyle]="{'border-color': tipo.color}">
+                <div class="card-body">
+                <h5 class="card-title">{{ cat.nombre }}</h5>
+                <p class="card-text text-muted">{{ cat.descripcion || 'Sin descripción' }}</p>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Metas -->
+    <div *ngIf="vista === 'metas'">
+        <h4>🎯 Metas</h4>
+        <div *ngIf="metas.length > 0; else sinMetas">
+        <div *ngFor="let m of metas" class="card mb-3 shadow-sm">
+            <div class="card-body">
+            <h5>{{ m.titulo }}</h5>
+            <p>Objetivo: S/. {{ m.objetivo }} | Acumulado: S/. {{ m.acumulado }}</p>
+            <div class="progress mb-2">
+                <div class="progress-bar" role="progressbar"
+                    [style.width.%]="(m.acumulado / m.objetivo) * 100"
+                    [class.bg-success]="m.acumulado >= m.objetivo">
+                {{ (m.acumulado / m.objetivo) * 100 | number:'1.0-0' }}%
+                </div>
+            </div>
+            <small class="text-muted">Límite: {{ m.fecha_limite | date }}</small>
+            <div *ngIf="m.activo" class="badge bg-success float-end">Activa</div>
+            </div>
+        </div>
+        </div>
+        <ng-template #sinMetas>
+        <div class="text-muted">No tienes metas registradas.</div>
+        </ng-template>
+    </div>
+</div>
